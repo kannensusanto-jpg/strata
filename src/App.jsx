@@ -341,59 +341,7 @@ Answer questions about hierarchy issues, reconciliation failures, IC pairs, risk
     const next = [...messages, { role: "user", content: msg }];
     setMessages(next);
     setLoading(true);
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, system: systemPrompt, messages: next.map(m => ({ role: m.role, content: m.content })) }),
-      });
-      const data = await res.json();
-      setMessages(m => [...m, { role: "assistant", content: data.content?.[0]?.text || "I couldn't process that." }]);
-    } catch { setMessages(m => [...m, { role: "assistant", content: "Connection error. Please try again." }]); }
-    setLoading(false);
-  };
-
-  const renderMsg = (content) => content.split("\n").map((line, i) => {
-    const html = line.replace(/\*\*(.+?)\*\*/g, (_, t) => `<strong style="color:#f1f5f9">${t}</strong>`);
-    return <p key={i} style={{ margin: "2px 0", lineHeight: 1.65 }} dangerouslySetInnerHTML={{ __html: html || "&nbsp;" }} />;
-  });
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
-        {messages.map((m, i) => (
-          <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", flexDirection: m.role === "user" ? "row-reverse" : "row" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", flexShrink: 0, background: m.role === "assistant" ? "linear-gradient(135deg,#38bdf8,#a78bfa)" : "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: m.role === "assistant" ? "white" : "#94a3b8" }}>
-              {m.role === "assistant" ? "S" : "U"}
-            </div>
-            <div style={{ maxWidth: "75%", fontSize: 13, lineHeight: 1.6, color: "#94a3b8", background: m.role === "assistant" ? "rgba(56,189,248,0.05)" : "rgba(255,255,255,0.04)", border: `1px solid ${m.role === "assistant" ? "rgba(56,189,248,0.15)" : "rgba(255,255,255,0.07)"}`, borderRadius: m.role === "assistant" ? "4px 12px 12px 12px" : "12px 4px 12px 12px", padding: "12px 16px" }}>
-              {renderMsg(m.content)}
-            </div>
-          </div>
-        ))}
-        {loading && (
-          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg,#38bdf8,#a78bfa)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "white" }}>S</div>
-            <div style={{ background: "rgba(56,189,248,0.05)", border: "1px solid rgba(56,189,248,0.15)", borderRadius: "4px 12px 12px 12px", padding: "14px 18px" }}>
-              <div style={{ display: "flex", gap: 5 }}>{[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#38bdf8", animation: `pulse 1.2s ${i*0.2}s infinite` }} />)}</div>
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-      {messages.length <= 2 && (
-        <div style={{ padding: "0 24px 12px", display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {SUGGESTED.map((s, i) => <button key={i} onClick={() => send(s)} style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.2)", borderRadius: 20, padding: "6px 12px", fontSize: 11, color: "#38bdf8", cursor: "pointer", fontFamily: "inherit" }}>{s}</button>)}
-        </div>
-      )}
-      <div style={{ padding: "12px 24px 20px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ display: "flex", gap: 10, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "8px 12px 8px 16px", alignItems: "center" }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && send()} placeholder="Ask about reconciliation, hierarchy, risk…" style={{ flex: 1, background: "transparent", border: "none", outline: "none", color: "#f1f5f9", fontSize: 13, fontFamily: "inherit" }} />
-          <button onClick={() => send()} disabled={!input.trim() || loading} style={{ background: input.trim() ? "linear-gradient(135deg,#38bdf8,#a78bfa)" : "rgba(255,255,255,0.08)", border: "none", borderRadius: 8, padding: "7px 14px", color: input.trim() ? "white" : "#475569", fontSize: 12, fontWeight: 700, cursor: input.trim() ? "pointer" : "default", transition: "all 0.15s", fontFamily: "inherit" }}>Ask →</button>
-        </div>
-      </div>
-    </div>
-  );
-}
+  
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 
