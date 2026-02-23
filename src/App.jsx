@@ -702,7 +702,7 @@ export default function StrataAI() {
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#34d399", animation: "pulse 2s infinite" }} />
                   <span style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0" }}>Strata AI Assistant</span>
-                  <span style={{ fontSize: 11, color: "#475569" }}>Powered by Claude · Your EPM data in context</span>
+                  <span style={{ fontSize: 11, color: "#475569" }}>Powered by AI · Your EPM data in context</span>
                 </div>
               </div>
               <Chatbot entities={entities} icPairs={icPairs} issues={issues} riskScores={riskScores} />
